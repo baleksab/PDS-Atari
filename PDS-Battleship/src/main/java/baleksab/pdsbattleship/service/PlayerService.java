@@ -1,5 +1,7 @@
 package baleksab.pdsbattleship.service;
 
+import baleksab.pdsbattleship.bean.LoginBean;
+import baleksab.pdsbattleship.bean.PlayerBean;
 import baleksab.pdsbattleship.bean.RegisterBean;
 import baleksab.pdsbattleship.entity.Player;
 import baleksab.pdsbattleship.exception.ValidationException;
@@ -11,6 +13,7 @@ import jakarta.inject.Named;
 import org.apache.commons.beanutils.BeanUtils;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -26,18 +29,43 @@ public class PlayerService {
     @Inject
     private PasswordEncoder passwordEncoder;
 
-    public void addUser(Player player) {
+    public void addPlayer(Player player) {
         playerRepository.add(player);
     }
 
-    public void registerUser(RegisterBean registerBean) throws InvocationTargetException, IllegalAccessException {
+    public PlayerBean loginPlayer(LoginBean loginBean) throws InvocationTargetException, IllegalAccessException {
+        Set<String> violations = beanValidator.validate(loginBean);
+
+        if (!violations.isEmpty()) {
+            throw new ValidationException("Failed logging player, validation violation!", violations);
+        }
+
+        Player player = getPlayerByUsername(loginBean.getUsername());
+
+        if (player == null) {
+            violations.add("Player with given username does not exist!");
+            throw new ValidationException("Failed logging player, player with given username doesn't exist!", violations);
+        }
+
+        if (!passwordEncoder.checkPassword(loginBean.getPassword(), player.getPassword())) {
+            violations.add("Wrong password!");
+            throw new ValidationException("Failed logging player, wrong password!", violations);
+        }
+
+        PlayerBean playerBean = new PlayerBean();
+        BeanUtils.copyProperties(playerBean, player);
+
+        return playerBean;
+    }
+
+    public void registerPlayer(RegisterBean registerBean) throws InvocationTargetException, IllegalAccessException {
         Set<String> violations = beanValidator.validate(registerBean);
 
         if (!violations.isEmpty()) {
             throw new ValidationException("Failed registering player, validation violation!", violations);
         }
 
-        if (getUserByUsername(registerBean.getUsername()) != null) {
+        if (getPlayerByUsername(registerBean.getUsername()) != null) {
             violations.add("Username is already taken!");
             throw new ValidationException("Failed registering player, username already taken!", violations);
         }
@@ -49,28 +77,44 @@ public class PlayerService {
 
         Player player = new Player();
         BeanUtils.copyProperties(player, registerBean);
+
         player.setPassword(passwordEncoder.hashPassword(player.getPassword()));
 
-        playerRepository.add(player);
+        addPlayer(player);
     }
 
-    public Player getUserById(int id) {
+    public Player getPlayerById(int id) {
         return playerRepository.getById(id);
     }
 
-    public Player getUserByUsername(String username) {
+    public Player getPlayerByUsername(String username) {
         return playerRepository.getByUsername(username);
     }
 
-    public List<Player> getAllUsers() {
-        return playerRepository.getAll();
+    public List<PlayerBean> getAllPlayers() {
+        List<Player> players = playerRepository.getAll();
+        List<PlayerBean> playerBeans = new ArrayList<>();
+
+        for (Player player : players) {
+            PlayerBean playerBean = new PlayerBean();
+
+            try {
+                BeanUtils.copyProperties(playerBean, player);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                System.out.println(e.getMessage());
+            }
+
+            playerBeans.add(playerBean);
+        }
+
+        return playerBeans;
     }
 
-    public void updateUser(Player player) {
+    public void updatePlayer(Player player) {
         playerRepository.update(player);
     }
 
-    public void deleteUser(Player player) {
+    public void deletePlayer(Player player) {
         playerRepository.delete(player);
     }
 

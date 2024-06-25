@@ -1,4 +1,4 @@
-<%--
+<%@ page import="java.util.Set" %><%--
   Created by IntelliJ IDEA.
   User: c425
   Date: 24.6.2024.
@@ -6,6 +6,14 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%
+    if (session.getAttribute("playerBean") != null) {
+        response.sendRedirect("index.jsp");
+        return;
+    }
+%>
+
 <html>
 <head>
     <title>PDS-Battleship Login</title>
@@ -21,7 +29,7 @@
             <h3 class="text-center mb-3">Please login</h3>
         </div>
 
-        <form>
+        <form action="login" method="post">
             <div class="form-floating mb-3">
                 <input type="text" id="username" name="username" class="form-control" placeholder="pera.peric">
                 <label for="username">Username</label>
@@ -33,7 +41,7 @@
             </div>
 
             <div class="d-flex">
-                <button type="button" class="btn btn-primary btn-block mb-4 flex-grow-1">Login</button>
+                <button type="submit" class="btn btn-primary btn-block mb-4 flex-grow-1">Login</button>
             </div>
 
             <div class="text-center">
@@ -41,6 +49,27 @@
             </div>
         </form>
     </div>
+
+    <%
+        if (request.getAttribute("success") != null) {
+    %>
+    <div class="alert alert-success">
+        <p>Successfully registered, you can login now.</p>
+    </div>
+    <% } %>
+
+    <%
+        if (request.getAttribute("violations") != null) {
+            Set<String> violations = (Set<String>) request.getAttribute("violations");
+    %>
+    <div class="alert alert-danger">
+        <ul>
+            <% for (String violation : violations) { %>
+            <li><%= violation %></li>
+            <% } %>
+        </ul>
+    </div>
+    <% } %>
 
     <script src="js/bootstrap.bundle.js"></script>
 </body>

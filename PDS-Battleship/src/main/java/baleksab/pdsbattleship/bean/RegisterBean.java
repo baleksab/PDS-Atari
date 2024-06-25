@@ -2,6 +2,7 @@ package baleksab.pdsbattleship.bean;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,5 +26,8 @@ public class RegisterBean {
     @NotBlank(message = "Password must not be blank!")
     @Size(min = 6, max = 32, message = "Password must be between 6 and 32 characters long!")
     private String confirmPassword;
+
+    @NotNull
+    private boolean isAdmin;
 
 }

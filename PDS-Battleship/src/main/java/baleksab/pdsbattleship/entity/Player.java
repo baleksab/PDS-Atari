@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -30,5 +32,8 @@ public class Player {
 
     @NotNull
     private boolean isAdmin;
+
+    @NotNull
+    private int wonMatches;
 
 }
