@@ -18,4 +18,11 @@ public class GameRepository {
         return query.getResultList();
     }
 
+    public List<Game> getAllGamesPaginated(int pageNumber, int pageSize) {
+        TypedQuery<Game> query = entityManager.createQuery("SELECT g FROM Game g", Game.class);
+        query.setFirstResult((pageNumber - 1) * pageSize);
+        query.setMaxResults(pageSize);
+        return query.getResultList();
+    }
+
 }

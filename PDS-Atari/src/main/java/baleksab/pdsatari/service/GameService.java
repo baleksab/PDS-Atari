@@ -1,6 +1,7 @@
 package baleksab.pdsatari.service;
 
 import baleksab.pdsatari.bean.GameBean;
+import baleksab.pdsatari.bean.PaginationBean;
 import baleksab.pdsatari.bean.UserBean;
 import baleksab.pdsatari.entity.Game;
 import baleksab.pdsatari.entity.User;
@@ -19,6 +20,19 @@ public class GameService {
 
     public List<GameBean> getAllGames() {
         List<Game> games = gameRepository.getAll();
+        return getGameBeans(games);
+    }
+
+    public List<GameBean> getAllGamesWithPagination(PaginationBean paginationBean) {
+        int pageNumber = paginationBean.getPage();
+        int pageSize = paginationBean.getSize();
+
+        List<Game> games = gameRepository.getAllGamesPaginated(pageNumber, pageSize);
+
+        return getGameBeans(games);
+    }
+
+    private List<GameBean> getGameBeans(List<Game> games) {
         List<GameBean> gameBeans = new ArrayList<>();
 
         for (Game game : games) {

@@ -13,8 +13,8 @@
     <link rel="stylesheet" href="css/styles.css">
     <title>PDS-Atari</title>
 </head>
-<body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark w-100 mb-2">
+<body class="bg-light" onload="loadGames(1)">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark w-100 position-fixed" style="z-index: 100;">
         <div class="container">
             <a class="navbar-brand" href="#">PDS-Atari</a>
 
@@ -49,14 +49,23 @@
         </div>
     </nav>
 
-    <div id="games-container" class="d-flex flex-wrap gap-2 justify-content-center align-items-center">
+    <div style="min-height: 56px; height: 56px;" class="w-100 mb-3"></div>
 
+    <div style="height: calc(100% - 68px); min-height: calc(100% - 68px)" class="w-100">
+        <div class="d-flex gap-3 mb-3 align-items-center justify-content-center">
+            <div class="form-floating z-0">
+                <input type="text" id="searchInput" name="searchInput" class="form-control" placeholder="Search for game..." oninput="search()">
+                <label for="searchInput">Search for a game...</label>
+            </div>
+
+            <div id="page-selection" class="d-flex align-items-center justify-content-center"></div>
+        </div>
+
+        <div id="games-container" class="d-flex flex-wrap gap-2 justify-content-center align-items-center pb-3"></div>
     </div>
 
-    <footer class="text-white text-center w-100 bg-dark d-flex align-items-center justify-content-center mt-3">
-        <p class="d-flex align-items-center justify-content-center">&copy; 2024 PDS-Atari</p>
-    </footer>
-
+    <script src="js/jquery.js"></script>
+    <script src="js/bootpag.js"></script>
     <script src="js/bootstrap.bundle.js"></script>
     <script src="js/scripts.js"></script>
 </body>
