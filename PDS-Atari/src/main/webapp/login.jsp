@@ -23,16 +23,16 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <div class="form-container">
-        <div class="mb-5">
-            <h1 class="text-center mb-1">PDS-Battleship</h1>
+    <div class="form-container flex-grow-1 d-flex flex-column justify-content-center align-items-center">
+        <div class="mb-5 w-100">
+            <h1 class="text-center mb-1">PDS-Atari</h1>
             <h3 class="text-center mb-3">Please login</h3>
         </div>
 
-        <form action="login" method="post">
+        <form method="post" action="login" class="w-100">
             <div class="form-floating mb-3">
-                <input type="text" id="username" name="username" class="form-control" placeholder="pera.peric">
-                <label for="username">Username</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="pera@gmail.com">
+                <label for="email">Email</label>
             </div>
 
             <div class="form-floating mb-3">
@@ -41,11 +41,12 @@
             </div>
 
             <div class="d-flex">
-                <button type="submit" class="btn btn-primary btn-block mb-4 flex-grow-1">Login</button>
+                <button type="submit" class="btn btn-dark btn-block mb-4 flex-grow-1">Login</button>
             </div>
 
             <div class="text-center">
                 <p>Not a member? <a href="register.jsp">Register</a></p>
+                <p>Want to go back? <a href="index.jsp">Catalog</a></p>
             </div>
         </form>
     </div>

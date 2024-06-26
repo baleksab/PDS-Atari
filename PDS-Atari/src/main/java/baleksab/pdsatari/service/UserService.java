@@ -44,7 +44,7 @@ public class UserService {
 
         if (user == null) {
             violations.add("User with given username does not exist!");
-            throw new ValidationException("Failed logging user, user with given username doesn't exist!", violations);
+            throw new ValidationException("Failed logging user, user with given email doesn't exist!", violations);
         }
 
         if (!passwordEncoder.checkPassword(loginBean.getPassword(), user.getPassword())) {
@@ -67,7 +67,7 @@ public class UserService {
 
         if (getUserByEmail(registerBean.getEmail()) != null) {
             violations.add("Email is already taken!");
-            throw new ValidationException("Failed registering user, username already taken!", violations);
+            throw new ValidationException("Failed registering user, email already taken!", violations);
         }
 
         if (!registerBean.getPassword().equals(registerBean.getConfirmPassword())) {
@@ -81,10 +81,6 @@ public class UserService {
         player.setPassword(passwordEncoder.hashPassword(player.getPassword()));
 
         addPlayer(player);
-    }
-
-    public User getUserById(int id) {
-        return userRepository.getById(id);
     }
 
     public User getUserByEmail(String username) {
@@ -108,14 +104,6 @@ public class UserService {
         }
 
         return userBeans;
-    }
-
-    public void updateUser(User player) {
-        userRepository.update(player);
-    }
-
-    public void deleteUser(User player) {
-        userRepository.delete(player);
     }
 
 }

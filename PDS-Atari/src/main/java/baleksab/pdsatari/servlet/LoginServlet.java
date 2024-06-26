@@ -32,7 +32,7 @@ public class LoginServlet extends HttpServlet {
             UserBean userBean = userService.loginPlayer(loginBean);
 
             HttpSession session = req.getSession();
-            session.setAttribute("playerBean", userBean);
+            session.setAttribute("userBean", userBean);
 
             resp.sendRedirect("index.jsp");
         } catch (ValidationException e) {

@@ -21,4 +21,6 @@ public class UserBean {
 
     private boolean isAdmin;
 
+    private float budget;
+
 }
