@@ -29,7 +29,7 @@ public class LoginServlet extends HttpServlet {
         try {
             BeanUtils.populate(loginBean, req.getParameterMap());
 
-            UserBean userBean = userService.loginPlayer(loginBean);
+            UserBean userBean = userService.loginUser(loginBean);
 
             HttpSession session = req.getSession();
             session.setAttribute("userBean", userBean);

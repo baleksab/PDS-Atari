@@ -34,6 +34,10 @@ public class UserRepository  {
         }
     }
 
+    public User getById(int id) {
+        return entityManager.find(User.class, id);
+    }
+
     public List<User> getAll() {
         TypedQuery<User> query = entityManager.createQuery("SELECT p FROM User p", User.class);
         return query.getResultList();

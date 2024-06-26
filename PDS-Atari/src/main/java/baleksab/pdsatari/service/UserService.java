@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@Named
+
 public class UserService {
 
     @Inject
@@ -29,11 +29,15 @@ public class UserService {
     @Inject
     private PasswordEncoder passwordEncoder;
 
-    public void addPlayer(User player) {
+    public void addUser(User player) {
         userRepository.add(player);
     }
 
-    public UserBean loginPlayer(LoginBean loginBean) throws InvocationTargetException, IllegalAccessException {
+    public User getByUserId(int id) {
+        return userRepository.getById(id);
+    }
+
+    public UserBean loginUser(LoginBean loginBean) throws InvocationTargetException, IllegalAccessException {
         Set<String> violations = beanValidator.validate(loginBean);
 
         if (!violations.isEmpty()) {
@@ -80,10 +84,10 @@ public class UserService {
 
         player.setPassword(passwordEncoder.hashPassword(player.getPassword()));
 
-        addPlayer(player);
+        addUser(player);
     }
 
-    public User getUserByEmail(String username) {
+    private User getUserByEmail(String username) {
         return userRepository.getByEmail(username);
     }
 

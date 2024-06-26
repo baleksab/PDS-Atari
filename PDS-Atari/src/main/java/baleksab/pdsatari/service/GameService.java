@@ -7,6 +7,7 @@ import baleksab.pdsatari.entity.Game;
 import baleksab.pdsatari.entity.User;
 import baleksab.pdsatari.repository.GameRepository;
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import org.apache.commons.beanutils.BeanUtils;
 
 import java.lang.reflect.InvocationTargetException;

@@ -16,7 +16,7 @@
 <body class="bg-light" onload="loadGames(1)">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark w-100 position-fixed" style="z-index: 100;">
         <div class="container">
-            <a class="navbar-brand" href="#">PDS-Atari</a>
+            <a class="navbar-brand" href="index.jsp">PDS-Atari</a>
 
             <div class="d-flex">
                 <span class="flex-grow-1"></span>
@@ -29,7 +29,7 @@
                         <a class="nav-link" href="#">Cart</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Chat Room</a>
+                        <a class="nav-link" href="chat.jsp">Chat Room</a>
                     </li>
                     <li class="nav-item">
                         <form method="post" action="logout">
@@ -67,6 +67,6 @@
     <script src="js/jquery.js"></script>
     <script src="js/bootpag.js"></script>
     <script src="js/bootstrap.bundle.js"></script>
-    <script src="js/scripts.js"></script>
+    <script src="js/index.js"></script>
 </body>
 </html>
