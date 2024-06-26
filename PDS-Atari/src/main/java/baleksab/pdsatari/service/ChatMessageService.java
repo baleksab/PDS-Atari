@@ -87,4 +87,10 @@ public class ChatMessageService {
         return chatMessageBean;
     }
 
+    public void deleteAllMessages() {
+        ChatMessageRepository chatMessageRepository = new ChatMessageRepository();
+        chatMessageRepository.deleteAll();
+        chatMessageRepository.close();
+    }
+
 }

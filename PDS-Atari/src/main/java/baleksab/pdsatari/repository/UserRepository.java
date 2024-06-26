@@ -15,11 +15,8 @@ public class UserRepository  {
 
     @Transactional
     public void add(User entity) {
-        entityManager.getTransaction().begin();
         entityManager.persist(entity);
-        entityManager.getTransaction().commit();
     }
-
 
     public User getByEmail(String email) {
         TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class);

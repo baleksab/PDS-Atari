@@ -37,9 +37,15 @@ function displayMessage(message) {
     const messageElement = document.createElement('div');
     messageElement.classList.add('message', message.userBean.id === userId ? 'sent' : 'received');
 
+    let admin = ``;
+
+    if (message.userBean.isAdmin) {
+        admin = `<span class="text-danger"> (Admin) </span>`;
+    }
+
     messageElement.innerHTML = `
         <div class="message-header">
-            <span class="sender-name">${message.userBean.firstName} ${message.userBean.lastName}</span>
+            <span class="sender-name">${message.userBean.firstName} ${message.userBean.lastName} ${admin}</span>
             <span class="timestamp">${message.date}</span>
         </div>
         <div class="message-body">

@@ -2,10 +2,7 @@ package baleksab.pdsatari.repository;
 
 import baleksab.pdsatari.entity.ChatMessage;
 import baleksab.pdsatari.entity.User;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-import jakarta.persistence.TypedQuery;
+import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
@@ -29,7 +26,6 @@ public class ChatMessageRepository {
         return chatMessage;
     }
 
-    @Transactional
     public User getUserById(int id) {
         return entityManager.find(User.class, id);
     }
@@ -38,6 +34,14 @@ public class ChatMessageRepository {
         TypedQuery<ChatMessage> query = entityManager.createQuery("SELECT cm FROM ChatMessage cm", ChatMessage.class);
         return query.getResultList();
     }
+
+    public void deleteAll() {
+        entityManager.getTransaction().begin();
+        Query query = entityManager.createQuery("DELETE FROM ChatMessage");
+        query.executeUpdate();
+        entityManager.getTransaction().commit();
+    }
+
 
     public void close() {
         if (entityManager != null) {

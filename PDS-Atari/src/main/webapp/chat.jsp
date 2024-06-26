@@ -55,15 +55,21 @@
 
     <div style="min-height: 56px; height: 56px;" class="w-100 mb-3"></div>
 
-    <div class="container">
-        <div id="chatMessages" class="d-flex flex-column">
-            <!-- Messages will be displayed here -->
+    <div class="container mb-3">
+        <div id="chatMessages" class="d-flex flex-column"></div>
+
+        <div class="d-flex gap-1 w-100 align-items-center justify-content-center">
+            <div class="form-floating flex-grow-1">
+                <input type="text" id="messageInput" name="firstName" class="form-control" placeholder="Type your message..." max="255" min="1">
+                <label for="messageInput">Type your message...</label>
+            </div>
+            <% if (userBean.isAdmin()) { %>
+            <form action="rmi-execution.jsp" method="post">
+                <button type="submit" class="btn btn-dark">Clear History</button>
+            </form>
+            <% } %>
         </div>
 
-        <div class="form-floating mb-3">
-            <input type="text" id="messageInput" name="firstName" class="form-control" placeholder="Type your message..." max="255" min="1">
-            <label for="messageInput">Type your message...</label>
-        </div>
     </div>
 
     <script src="js/bootstrap.bundle.js"></script>
