@@ -1,5 +1,6 @@
 package baleksab.pdsatari.bean;
 
+import baleksab.pdsatari.entity.UserCart;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

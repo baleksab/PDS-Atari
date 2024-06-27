@@ -8,14 +8,16 @@ import jakarta.transaction.Transactional;
 
 import java.util.List;
 
+
 public class UserRepository  {
 
     @Inject
     private EntityManager entityManager;
 
-    @Transactional
     public void add(User entity) {
+        entityManager.getTransaction().begin();
         entityManager.persist(entity);
+        entityManager.getTransaction().commit();
     }
 
     public User getByEmail(String email) {

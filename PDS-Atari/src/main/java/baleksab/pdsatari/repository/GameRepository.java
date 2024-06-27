@@ -25,4 +25,8 @@ public class GameRepository {
         return query.getResultList();
     }
 
+    public Game getById(int id) {
+        return entityManager.find(Game.class, id);
+    }
+
 }

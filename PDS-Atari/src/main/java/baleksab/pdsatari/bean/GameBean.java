@@ -1,5 +1,6 @@
 package baleksab.pdsatari.bean;
 
+import baleksab.pdsatari.entity.UserCart;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -11,6 +12,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,5 +32,9 @@ public class GameBean {
     private String description;
 
     private float rating;
+
+    private int stock;
+
+    private List<Integer> customerCarts;
 
 }

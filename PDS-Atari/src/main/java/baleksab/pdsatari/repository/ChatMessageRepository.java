@@ -2,6 +2,7 @@ package baleksab.pdsatari.repository;
 
 import baleksab.pdsatari.entity.ChatMessage;
 import baleksab.pdsatari.entity.User;
+import baleksab.pdsatari.util.EntityManagerProducer;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 
@@ -9,15 +10,13 @@ import java.util.List;
 
 public class ChatMessageRepository {
 
-    private final EntityManagerFactory entityManagerFactory;
     private final EntityManager entityManager;
 
     public ChatMessageRepository() {
-        entityManagerFactory = Persistence.createEntityManagerFactory("PDS-Atari");
-        entityManager = entityManagerFactory.createEntityManager();
+        EntityManagerProducer entityManagerProducer = new EntityManagerProducer();
+        entityManager = entityManagerProducer.produceEntityManager();
     }
 
-    @Transactional
     public ChatMessage add(ChatMessage chatMessage) {
         entityManager.getTransaction().begin();
         entityManager.persist(chatMessage);
@@ -42,13 +41,10 @@ public class ChatMessageRepository {
         entityManager.getTransaction().commit();
     }
 
-
     public void close() {
         if (entityManager != null) {
             entityManager.close();
         }
-        if (entityManagerFactory != null) {
-            entityManagerFactory.close();
-        }
     }
+
 }

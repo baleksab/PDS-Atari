@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-
+@Named
 public class UserService {
 
     @Inject
@@ -47,7 +47,7 @@ public class UserService {
         User user = getUserByEmail(loginBean.getEmail());
 
         if (user == null) {
-            violations.add("User with given username does not exist!");
+            violations.add("User with given email does not exist!");
             throw new ValidationException("Failed logging user, user with given email doesn't exist!", violations);
         }
 
@@ -79,12 +79,12 @@ public class UserService {
             throw new ValidationException("Failed registering user, passwords must match!", violations);
         }
 
-        User player = new User();
-        BeanUtils.copyProperties(player, registerBean);
+        User user = new User();
+        BeanUtils.copyProperties(user, registerBean);
 
-        player.setPassword(passwordEncoder.hashPassword(player.getPassword()));
+        user.setPassword(passwordEncoder.hashPassword(user.getPassword()));
 
-        addUser(player);
+        addUser(user);
     }
 
     private User getUserByEmail(String username) {

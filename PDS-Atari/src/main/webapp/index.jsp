@@ -1,7 +1,15 @@
+<%@ page import="baleksab.pdsatari.bean.UserBean" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <%
     boolean loggedIn = session.getAttribute("userBean") != null;
+    int id = -1;
+    boolean isAdmin = false;
+
+    if (loggedIn) {
+        id = ((UserBean) session.getAttribute("userBean")).getId();
+        isAdmin = ((UserBean) session.getAttribute("userBean")).isAdmin();
+    }
 %>
 
 <!DOCTYPE html>
@@ -13,7 +21,7 @@
     <link rel="stylesheet" href="css/styles.css">
     <title>PDS-Atari</title>
 </head>
-<body class="bg-light" onload="loadGames(1)">
+<body class="bg-light" onload="load(<%= id %>, <%= isAdmin %>)">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark w-100 position-fixed" style="z-index: 100;">
         <div class="container">
             <a class="navbar-brand" href="index.jsp">PDS-Atari</a>

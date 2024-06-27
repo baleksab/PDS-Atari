@@ -5,7 +5,10 @@ import baleksab.pdsatari.bean.PaginationBean;
 import baleksab.pdsatari.bean.UserBean;
 import baleksab.pdsatari.entity.Game;
 import baleksab.pdsatari.entity.User;
+import baleksab.pdsatari.entity.UserCart;
+import baleksab.pdsatari.entity.UserInventory;
 import baleksab.pdsatari.repository.GameRepository;
+import baleksab.pdsatari.repository.UserCartRepository;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import org.apache.commons.beanutils.BeanUtils;
@@ -18,6 +21,9 @@ public class GameService {
 
     @Inject
     private GameRepository gameRepository;
+
+    @Inject
+    private UserCartRepository userCartRepository;
 
     public List<GameBean> getAllGames() {
         List<Game> games = gameRepository.getAll();
@@ -33,6 +39,10 @@ public class GameService {
         return getGameBeans(games);
     }
 
+    public Game getByGameId(int id) {
+        return gameRepository.getById(id);
+    }
+
     private List<GameBean> getGameBeans(List<Game> games) {
         List<GameBean> gameBeans = new ArrayList<>();
 
@@ -44,6 +54,9 @@ public class GameService {
             } catch (IllegalAccessException | InvocationTargetException e) {
                 System.out.println(e.getMessage());
             }
+
+            List<Integer> userCarts = userCartRepository.getAllUsersWithGameInCart(gameBean.getId());
+            gameBean.setCustomerCarts(userCarts);
 
             gameBeans.add(gameBean);
         }

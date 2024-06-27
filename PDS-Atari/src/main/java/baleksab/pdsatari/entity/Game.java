@@ -1,23 +1,17 @@
 package baleksab.pdsatari.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 public class Game {
 
     @Id
@@ -41,5 +35,9 @@ public class Game {
     @DecimalMin(value = "0.0", message = "Rating must not be lower than 0.0!")
     @DecimalMax(value = "5.0", message = "Rating must not be greater than 5.0!")
     private float rating;
+
+    @NotNull(message = "Stock can not be null!")
+    @Min(value = 0, message = "Minimum stock is 0!")
+    private int stock;
 
 }
