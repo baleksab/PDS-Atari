@@ -29,7 +29,7 @@
 <body class="bg-light" onload="load(<%= userBean.getId() %>)">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark w-100 position-fixed" style="z-index: 100;">
         <div class="container">
-            <a class="navbar-brand" href="index.jsp">PDS-Atari Chat</a>
+            <a class="navbar-brand" href="index.jsp">PDS-Atari</a>
 
             <div class="d-flex">
                 <span class="flex-grow-1"></span>
@@ -38,7 +38,7 @@
                         <a class="nav-link" href="#">Profile</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Cart</a>
+                        <a class="nav-link" href="cart.jsp">Cart</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="chat.jsp">Chat Room</a>

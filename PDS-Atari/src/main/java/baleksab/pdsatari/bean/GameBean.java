@@ -37,4 +37,6 @@ public class GameBean {
 
     private List<Integer> customerCarts;
 
+    private List<Integer> customerInventories;
+
 }

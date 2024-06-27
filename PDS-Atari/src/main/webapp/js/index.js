@@ -45,6 +45,10 @@ function loadGames(pageNumber) {
                         buttonText = "Remove from cart";
                         buttonColor = "btn-danger";
                         buttonFunction = `removeFromCart(${game.id})`;
+                    } else if (game.customerInventories.includes(userId)) {
+                        buttonText = "Already owned";
+                        buttonColor = 'btn-dark';
+                        buttonDisabled = 'disabled';
                     } else if (noStock) {
                         buttonText = "Out of stock";
                         buttonColor = "btn-dark";

@@ -9,6 +9,7 @@ import baleksab.pdsatari.entity.UserCart;
 import baleksab.pdsatari.entity.UserInventory;
 import baleksab.pdsatari.repository.GameRepository;
 import baleksab.pdsatari.repository.UserCartRepository;
+import baleksab.pdsatari.repository.UserInventoryRepository;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import org.apache.commons.beanutils.BeanUtils;
@@ -24,6 +25,9 @@ public class GameService {
 
     @Inject
     private UserCartRepository userCartRepository;
+
+    @Inject
+    private UserInventoryRepository userInventoryRepository;
 
     public List<GameBean> getAllGames() {
         List<Game> games = gameRepository.getAll();
@@ -57,6 +61,9 @@ public class GameService {
 
             List<Integer> userCarts = userCartRepository.getAllUsersWithGameInCart(gameBean.getId());
             gameBean.setCustomerCarts(userCarts);
+
+            List<Integer> userInventories = userInventoryRepository.getAllUsersWithGameInInventory(gameBean.getId());
+            gameBean.setCustomerInventories(userInventories);
 
             gameBeans.add(gameBean);
         }

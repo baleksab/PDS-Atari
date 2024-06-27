@@ -34,7 +34,6 @@ public class User {
     private boolean isAdmin;
 
     @NotNull(message = "Budget must not be null!")
-    @DecimalMin(value = "10.0", message = "Minimum budget is 10 dollars!")
     private float budget;
 
 }

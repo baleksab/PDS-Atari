@@ -42,4 +42,10 @@ public class UserRepository  {
         return query.getResultList();
     }
 
+    public void updateUser(User user) {
+        entityManager.getTransaction().begin();
+        entityManager.merge(user);
+        entityManager.getTransaction().commit();
+    }
+
 }

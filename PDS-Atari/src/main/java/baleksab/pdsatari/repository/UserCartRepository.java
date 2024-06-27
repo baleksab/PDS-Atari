@@ -18,6 +18,14 @@ public class UserCartRepository {
     public List<Integer> getAllUsersWithGameInCart(int gameId) {
         TypedQuery<Integer> query = entityManager.createQuery("SELECT c.user.id FROM UserCart c WHERE c.game.id = :gameId", Integer.class);
         query.setParameter("gameId", gameId);
+
+        return query.getResultList();
+    }
+
+    public List<Game> getAllGamesInCart(int userId) {
+        TypedQuery<Game> query = entityManager.createQuery("SELECT c.game FRom UserCart c WHERE c.user.id = :userId", Game.class);
+        query.setParameter("userId", userId);
+
         return query.getResultList();
     }
 

@@ -110,4 +110,7 @@ public class UserService {
         return userBeans;
     }
 
+    public void updateUser(User user) {
+        userRepository.updateUser(user);
+    }
 }

@@ -34,7 +34,7 @@
                         <a class="nav-link" href="#">Profile</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Cart</a>
+                        <a class="nav-link" href="cart.jsp">Cart</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="chat.jsp">Chat Room</a>
