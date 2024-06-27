@@ -24,10 +24,12 @@ function loadGames(pageNumber) {
             games.forEach(function (game) {
                 let color = ''
                 let emoji = '🟢';
+                let noStock = false;
 
                 if (game.stock < 1) {
                     color = 'text-danger';
                     emoji = '🔴';
+                    noStock = true;
                 }
 
                 let loggedInControls = '';
@@ -37,11 +39,16 @@ function loadGames(pageNumber) {
                     let buttonColor = "btn-success";
                     let buttonFunction = `addToCart(${game.id})`;
                     let buttonId = `buy${game.id}`;
+                    let buttonDisabled = '';
 
                     if (game.customerCarts.includes(userId)) {
                         buttonText = "Remove from cart";
                         buttonColor = "btn-danger";
                         buttonFunction = `removeFromCart(${game.id})`;
+                    } else if (noStock) {
+                        buttonText = "Out of stock";
+                        buttonColor = "btn-dark";
+                        buttonDisabled = 'disabled';
                     }
 
                     if (isAdmin) {
@@ -49,14 +56,14 @@ function loadGames(pageNumber) {
                             <div class="d-flex align-items-center justify-content-center gap-1">
                                 <span class="flex-grow-1"></span>
                                 <button class="btn btn-warning">Edit</button>
-                                <button id="${buttonId}" class="btn ${buttonColor}" onclick="${buttonFunction}">${buttonText}</button>
+                                <button id="${buttonId}" class="btn ${buttonColor}" onclick="${buttonFunction}" ${buttonDisabled}>${buttonText}</button>
                             </div>
                         `;
                     } else {
                         loggedInControls = `
                             <div class="d-flex align-items-center justify-content-center gap-1">
                                 <span class="flex-grow-1"></span>
-                                <button id="${buttonId}" class="btn ${buttonColor}" onclick="${buttonFunction}">${buttonText}</button>
+                                <button id="${buttonId}" class="btn ${buttonColor}" onclick="${buttonFunction}" ${buttonDisabled}>${buttonText}</button>
                             </div>
                         `;
                     }
@@ -70,7 +77,7 @@ function loadGames(pageNumber) {
                             <div class="game-meta">
                                 <span class="rating">⭐ ${game.rating}</span>
                                 <span>💵 $${game.price}</span>
-                                <span>${emoji} <span class="${color}">${game.stock}</span></span>
+                                <span id="stock${game.id}" data-stock="${game.stock}">${emoji} <span class="${color}">${game.stock}</span></span>
                             </div>
                             <p>${game.description}</p>
                             ${loggedInControls}
@@ -89,6 +96,7 @@ function loadGames(pageNumber) {
 
 function addToCart(id) {
     const button = document.querySelector(`#buy${id}`);
+    const stock = document.querySelector(`#stock${id}`);
     button.disabled = true;
 
     let xhr = new XMLHttpRequest();
@@ -107,6 +115,20 @@ function addToCart(id) {
                 button.onclick = function() {
                     removeFromCart(id);
                 }
+
+                stock.dataset.stock = Number(stock.dataset.stock) - 1;
+
+                let color = ''
+                let emoji = '🟢';
+
+                if (stock.dataset.stock < 1) {
+                    color = 'text-danger';
+                    emoji = '🔴';
+                }
+
+                stock.innerHTML = `
+                    ${emoji} <span class="${color}">${stock.dataset.stock}</span>
+                `;
             }
 
             button.disabled = false;
@@ -118,6 +140,7 @@ function addToCart(id) {
 
 function removeFromCart(id) {
     const button = document.querySelector(`#buy${id}`);
+    const stock = document.querySelector(`#stock${id}`);
     button.disabled = true;
 
     let xhr = new XMLHttpRequest();
@@ -136,6 +159,14 @@ function removeFromCart(id) {
                 button.onclick = function() {
                     addToCart(id);
                 }
+
+                stock.dataset.stock = Number(stock.dataset.stock) + 1;
+
+                let emoji = '🟢';
+
+                stock.innerHTML = `
+                    ${emoji} <span>${stock.dataset.stock}</span>
+                `;
             }
 
             button.disabled = false;

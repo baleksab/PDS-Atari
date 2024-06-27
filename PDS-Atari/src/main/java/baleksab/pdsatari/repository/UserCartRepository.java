@@ -1,5 +1,6 @@
 package baleksab.pdsatari.repository;
 
+import baleksab.pdsatari.entity.Game;
 import baleksab.pdsatari.entity.User;
 import baleksab.pdsatari.entity.UserCart;
 import jakarta.inject.Inject;
@@ -21,17 +22,34 @@ public class UserCartRepository {
     }
 
     public void add(UserCart userCart) {
-        entityManager.getTransaction().begin();
-        entityManager.persist(userCart);
-        entityManager.getTransaction().commit();
+        Game game = userCart.getGame();
+
+        if (game.getStock() > 0) {
+            entityManager.getTransaction().begin();
+            entityManager.persist(userCart);
+
+            game.setStock(game.getStock() - 1);
+
+            entityManager.merge(game);
+            entityManager.getTransaction().commit();
+        }
     }
 
     public void delete(UserCart userCart) {
         entityManager.getTransaction().begin();
-        Query query = entityManager.createQuery("DELETE FROM UserCart c WHERE c.user.id = :userId AND c.game.id = :gameId");
-        query.setParameter("userId", userCart.getUser().getId());
+
+        TypedQuery<UserCart> query = entityManager.createQuery("SELECT c FROM UserCart c WHERE c.game.id = :gameId and c.user.id = :userId", UserCart.class);
         query.setParameter("gameId", userCart.getGame().getId());
-        query.executeUpdate();
+        query.setParameter("userId", userCart.getUser().getId());
+        UserCart cart =  query.getSingleResult();
+
+        if (cart != null) {
+            Game game = cart.getGame();
+            entityManager.remove(cart);
+            game.setStock(game.getStock() + 1);
+            entityManager.merge(game);
+        }
+
         entityManager.getTransaction().commit();
     }
 

@@ -37,6 +37,10 @@ public class UserCartService {
             User user = userService.getByUserId(bean.getUserId());
             Game game = gameService.getByGameId(bean.getGameId());
 
+            if (game.getStock() < 1) {
+                return false;
+            }
+
             UserCart userCart = new UserCart();
             userCart.setUser(user);
             userCart.setGame(game);
