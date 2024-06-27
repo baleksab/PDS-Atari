@@ -59,7 +59,7 @@ function loadGames(pageNumber) {
                         loggedInControls = `
                             <div class="d-flex align-items-center justify-content-center gap-1">
                                 <span class="flex-grow-1"></span>
-                                <button class="btn btn-warning">Edit</button>
+                                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editGameModal" onclick="editGame(${game.id})">Edit</button>
                                 <button id="${buttonId}" class="btn ${buttonColor}" onclick="${buttonFunction}" ${buttonDisabled}>${buttonText}</button>
                             </div>
                         `;
@@ -74,7 +74,7 @@ function loadGames(pageNumber) {
                 }
 
                 const gameCard = `
-                    <div class="game-card">
+                    <div class="game-card" id="gameCard${game.id}">
                         <img src="${game.path}" alt="${game.name}">
                         <div class="game-details">
                             <h5>${game.name}</h5>
@@ -193,6 +193,83 @@ function search() {
             card.style.display = 'none';
         }
     });
+}
+
+function editGame(gameId) {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', `game?gameId=${gameId}`, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            const game = JSON.parse(xhr.responseText);
+
+            const modalBody = document.getElementById('gameDetailsModalBody');
+            modalBody.innerHTML = `
+                <h5>${game.name}</h5>
+                <div class="form-group">
+                    <label for="editDescription">Description:</label>
+                    <textarea id="editDescription" class="form-control" minlength="3">${game.description}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editPrice">Price:</label>
+                    <input type="number" id="editPrice" class="form-control" value="${game.price}" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="editStock">Stock:</label>
+                    <input type="number" id="editStock" class="form-control" value="${game.stock}" min="0">
+                </div>
+            `;
+
+            const button = document.querySelector('#saveChangesBtn');
+            button.onclick = function () {
+                saveChanges(gameId);
+            }
+        }
+    };
+
+    xhr.send();
+}
+
+function saveChanges(gameId) {
+    const saveButton = document.querySelector('#saveChangesBtn');
+    saveButton.disabled = true;
+
+    const cancelButton = document.querySelector('#cancelChangesBtn');
+    cancelButton.disabled = true;
+
+    const description = document.getElementById('editDescription').value;
+    const price = document.getElementById('editPrice').value;
+    const stock = document.getElementById('editStock').value;
+
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', `game?id=${gameId}&description=${encodeURIComponent(description)}&price=${price}&stock=${stock}`, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            const response = JSON.parse(xhr.responseText);
+
+            if (response.success === true) {
+                alert('Changes saved successfully!');
+
+                const gameDescription = document.querySelector(`#gameCard${gameId} .game-details p`);
+                const gamePrice = document.querySelector(`#gameCard${gameId} .game-meta span:nth-child(2)`);
+                const gameStock = document.querySelector(`#gameCard${gameId} .game-meta #stock${gameId} span`);
+
+                gameDescription.textContent = description;
+                gamePrice.textContent = `💵 $${price}`;
+                gameStock.textContent = stock;
+            } else {
+                alert('Failed to save changes.');
+            }
+
+            saveButton.disabled = false;
+            cancelButton.disabled = false;
+        }
+    };
+
+    xhr.send();
 }
 
 $('#page-selection').bootpag({

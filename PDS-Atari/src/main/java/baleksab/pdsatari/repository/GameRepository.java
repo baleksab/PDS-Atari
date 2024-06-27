@@ -29,4 +29,10 @@ public class GameRepository {
         return entityManager.find(Game.class, id);
     }
 
+    public void update(Game game) {
+        entityManager.getTransaction().begin();
+        entityManager.merge(game);
+        entityManager.getTransaction().commit();
+    }
+
 }

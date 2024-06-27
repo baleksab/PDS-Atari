@@ -72,6 +72,22 @@
         <div id="games-container" class="d-flex flex-wrap gap-2 justify-content-center align-items-center pb-3"></div>
     </div>
 
+    <div class="modal fade" id="editGameModal" tabindex="-1" role="dialog" aria-labelledby="editGameModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editGameModalLabel">Edit Game</h5>
+                </div>
+                <div class="modal-body" id="gameDetailsModalBody">
+                </div>
+                <div class="modal-footer">
+                    <button id="cancelChangesBtn" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="saveChangesBtn" class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="js/jquery.js"></script>
     <script src="js/bootpag.js"></script>
     <script src="js/bootstrap.bundle.js"></script>
