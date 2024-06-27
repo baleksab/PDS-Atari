@@ -56,9 +56,19 @@
                 <label for="confirmPassword">Confirm password</label>
             </div>
 
-            <div class="form-floating mb-3">
-                <input type="number" id="budget" name="budget" class="form-control" placeholder="Enter your budget">
-                <label for="budget">Budget</label>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="number" id="budget" name="budget" class="form-control" placeholder="Enter your budget">
+                        <label for="budget">Budget</label>
+                    </div>
+                </div>
+                <div class="col-md-6 d-flex align-items-center justify-content-center">
+                    <div class="form-check">
+                        <input type="checkbox" id="isAdmin" name="isAdmin" class="form-check-input">
+                        <label class="form-check-label" for="isAdmin">Make administrator</label>
+                    </div>
+                </div>
             </div>
 
             <div class="d-flex">

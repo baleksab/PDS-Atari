@@ -26,7 +26,10 @@ public class RegisterServlet extends HttpServlet {
 
         try {
             BeanUtils.populate(registerBean, req.getParameterMap());
-            registerBean.setAdmin(false);
+
+            if (req.getParameter("isAdmin") != null) {
+                registerBean.setAdmin(true);
+            }
 
             userService.registerUser(registerBean);
 
