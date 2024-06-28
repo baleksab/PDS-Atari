@@ -18,7 +18,6 @@ function loadGames() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
             games = JSON.parse(xhr.responseText);
-            console.log(games);
             setupPagination(games.length);
             loadPage(1);
         }
@@ -158,6 +157,13 @@ function addToCart(id) {
                 stock.innerHTML = `
                     ${emoji} <span class="${color}">${stock.dataset.stock}</span>
                 `;
+
+                const gameIndex = games.findIndex(game => game.id === id);
+
+                if (gameIndex !== -1) {
+                    games[gameIndex].stock = Number(stock.dataset.stock);
+                    games[gameIndex].customerCarts.push(userId);
+                }
             }
 
             button.disabled = false;
@@ -196,6 +202,18 @@ function removeFromCart(id) {
                 stock.innerHTML = `
                     ${emoji} <span>${stock.dataset.stock}</span>
                 `;
+
+                const gameIndex = games.findIndex(game => game.id === id);
+
+                if (gameIndex !== -1) {
+                    games[gameIndex].stock = Number(stock.dataset.stock);
+
+                    const userIndex = games[gameIndex].customerCarts.indexOf(userId);
+
+                    if (userIndex !== -1) {
+                        games[gameIndex].customerCarts.splice(userIndex, 1);
+                    }
+                }
             }
 
             button.disabled = false;
