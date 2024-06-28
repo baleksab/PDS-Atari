@@ -1,6 +1,7 @@
 package baleksab.pdsatari.repository;
 
 import baleksab.pdsatari.entity.Game;
+import baleksab.pdsatari.entity.UserCart;
 import baleksab.pdsatari.entity.UserInventory;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -31,6 +32,24 @@ public class UserInventoryRepository {
         query.setParameter("gameId", gameId);
 
         return query.getResultList();
+    }
+
+    public void delete(UserInventory userInventory) {
+        entityManager.getTransaction().begin();
+
+        TypedQuery<UserInventory> query = entityManager.createQuery("SELECT c FROM UserInventory c WHERE c.game.id = :gameId and c.user.id = :userId", UserInventory.class);
+        query.setParameter("gameId", userInventory.getGame().getId());
+        query.setParameter("userId", userInventory.getUser().getId());
+        UserInventory cart =  query.getSingleResult();
+
+        if (cart != null) {
+            Game game = cart.getGame();
+            entityManager.remove(cart);
+            game.setStock(game.getStock() + 1);
+            entityManager.merge(game);
+        }
+
+        entityManager.getTransaction().commit();
     }
 
 }

@@ -27,7 +27,7 @@
 
     <title>PDS-Atari Inventory</title>
 </head>
-<body class="bg-light">
+<body class="bg-light" onload="load(<%= userBean.getId() %>, <%= userBean.getBudget() %>)">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark w-100 position-fixed" style="z-index: 100;">
         <div class="container">
             <a class="navbar-brand" href="index.jsp">PDS-Atari</a>
@@ -62,7 +62,37 @@
         </div>
     </nav>
 
-    <div style="min-height: 56px; height: 56px;" class="w-100 mb-3"></div>
+    <div style="min-height: 56px; height: 56px;" class="w-100"></div>
+
+    <div class="d-flex w-100 p-2 align-items-start justify-content-center gap-2" style="height: calc(100% - 56px);">
+        <div class="d-flex flex-column gap-2 h-100" style="flex-basis: 20%;">
+            <div class="card flex-grow-1">
+                <div class="card-header">
+                    <div class="card-title">Your information</div>
+                </div>
+
+                <div class="card-body">
+                    <div class="card-text">First Name: <%= userBean.getFirstName() %> </div>
+                    <div class="card-text">Last Name: <%= userBean.getLastName() %> </div>
+                    <div class="card-text">Email: <%= userBean.getEmail() %> </div>
+                    <div class="card-text" id="budget">Budget: $<%= userBean.getBudget() %></div>
+                    <div class="card-text"><b>You can sell your games for 70% of purchase price!</b></div>
+                    <div class="card-text text-danger" id="empty-inventory"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex flex-column justify-content-start gap-2 flex-grow-1 h-100">
+            <div class="form-floating">
+                <input type="text" id="searchInput" name="searchInput" class="form-control" placeholder="Search inventory..." oninput="search()">
+                <label for="searchInput">Search inventory...</label>
+            </div>
+
+            <div id="inventory-games" class="flex-grow-1 overflow-auto">
+
+            </div>
+        </div>
+    </div>
 
 
     <div class="modal fade" id="help" tabindex="-1" role="dialog" aria-labelledby="helpModal" aria-hidden="true">
@@ -126,5 +156,6 @@
     </div>
 
     <script src="js/bootstrap.bundle.js"></script>
+    <script src="js/inventory.js"></script>
 </body>
 </html>
