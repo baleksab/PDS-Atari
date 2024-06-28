@@ -14,6 +14,11 @@
     }
 
     UserBean userBean = (UserBean) session.getAttribute("userBean");
+
+    if (!userBean.isAdmin()) {
+        response.sendRedirect("index.jsp");
+        return;
+    }
 %>
 
 <!DOCTYPE html>
@@ -63,23 +68,28 @@
 
     <div style="min-height: 56px; height: 56px;" class="w-100 mb-3"></div>
 
-    <div class="container mb-3">
-        <div id="chatMessages" class="d-flex flex-column"></div>
+    <div id="page-selection" class="mt-3"></div>
 
-        <div class="d-flex gap-1 w-100 align-items-center justify-content-center">
-            <div class="form-floating flex-grow-1">
-                <input type="text" id="messageInput" name="firstName" class="form-control" placeholder="Type your message..." max="255" min="1">
-                <label for="messageInput">Type your message...</label>
-            </div>
-            <% if (userBean.isAdmin()) { %>
-            <form action="rmi-execution.jsp" method="post">
-                <button type="submit" class="btn btn-dark">Clear History</button>
-            </form>
-            <% } %>
+    <div class="container mt-5 flex-grow-1">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Admin</th>
+                    <th>Budget</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody id="userTableBody">
+
+                </tbody>
+            </table>
         </div>
-
     </div>
-
 
     <div class="modal fade" id="help" tabindex="-1" role="dialog" aria-labelledby="helpModal" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -141,7 +151,9 @@
         </div>
     </div>
 
+    <script src="js/jquery.js"></script>
+    <script src="js/bootpag.js"></script>
     <script src="js/bootstrap.bundle.js"></script>
-    <script src="js/chat.js"></script>
+    <script src="js/admin.js"></script>
 </body>
 </html>

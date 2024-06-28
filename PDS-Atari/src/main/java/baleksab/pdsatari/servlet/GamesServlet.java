@@ -24,15 +24,7 @@ public class GamesServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        PaginationBean paginationBean = new PaginationBean();
-
-        try {
-            BeanUtils.populate(paginationBean, req.getParameterMap());
-        } catch (InvocationTargetException | IllegalAccessException e) {
-            System.out.println(e.getMessage());
-        }
-
-        List<GameBean> games = gameService.getAllGamesWithPagination(paginationBean);
+        List<GameBean> games = gameService.getAllGames();
 
         String json = new Gson().toJson(games);
 

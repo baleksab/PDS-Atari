@@ -91,7 +91,7 @@ public class UserService {
         return userRepository.getByEmail(username);
     }
 
-    public List<UserBean> getAllPlayers() {
+    public List<UserBean> getAllUsers() {
         List<User> users = userRepository.getAll();
         List<UserBean> userBeans = new ArrayList<>();
 
@@ -108,6 +108,31 @@ public class UserService {
         }
 
         return userBeans;
+    }
+
+    public boolean updateUserByBean(UserBean userBean) {
+        Set<String> violations = beanValidator.validate(userBean);
+
+        if (!violations.isEmpty()) {
+            return false;
+        }
+
+        User emailCheck = getUserByEmail(userBean.getEmail());
+
+        if (emailCheck != null && emailCheck.getId() != userBean.getId()) {
+            return false;
+        }
+
+        User user = getByUserId(userBean.getId());
+        user.setEmail(userBean.getEmail());
+        user.setBudget(userBean.getBudget());
+        user.setFirstName(userBean.getFirstName());
+        user.setLastName(userBean.getLastName());
+        user.setAdmin(userBean.isAdmin());
+
+        updateUser(user);
+
+        return true;
     }
 
     public void updateUser(User user) {

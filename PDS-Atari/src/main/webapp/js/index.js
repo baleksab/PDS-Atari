@@ -1,79 +1,108 @@
 let userId;
 let isAdmin;
+let games = [];
+let gamesPerPage = 8;
 
 function load(id, admin) {
     userId = id;
     isAdmin = admin
-    loadGames(1);
+    loadGames();
 }
 
 
-function loadGames(pageNumber) {
+function loadGames() {
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', `games?page=${pageNumber}&size=10`, false);
+    xhr.open('GET', `games`, false);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-            const games = JSON.parse(xhr.responseText);
+            games = JSON.parse(xhr.responseText);
+            console.log(games);
+            setupPagination(games.length);
+            loadPage(1);
+        }
+    };
 
-            const gamesDiv = document.querySelector('#games-container');
-            gamesDiv.innerHTML = '';
+    xhr.send();
+}
 
+function setupPagination(totalGames) {
+    const totalPages = Math.ceil(totalGames / gamesPerPage);
+    $('#page-selection').bootpag({
+        total: totalPages,
+        page: 1,
+        maxVisible: 10
+    }).on('page', function (event, num) {
+        loadPage(num);
+    });
+}
 
-            games.forEach(function (game) {
-                let color = ''
-                let emoji = '🟢';
-                let noStock = false;
+function loadPage(pageNum) {
+    const startIndex = (pageNum - 1) * gamesPerPage;
+    const endIndex = Math.min(startIndex + gamesPerPage, games.length);
+    const gamesForPage = games.slice(startIndex, endIndex);
 
-                if (game.stock < 1) {
-                    color = 'text-danger';
-                    emoji = '🔴';
-                    noStock = true;
-                }
+    populateTable(gamesForPage);
+}
 
-                let loggedInControls = '';
+function populateTable(games) {
+    const gamesDiv = document.querySelector('#games-container');
+    gamesDiv.innerHTML = '';
 
-                if (userId !== -1) {
-                    let buttonText = "Add to cart";
-                    let buttonColor = "btn-success";
-                    let buttonFunction = `addToCart(${game.id})`;
-                    let buttonId = `buy${game.id}`;
-                    let buttonDisabled = '';
+    games.forEach(function (game) {
+        let color = ''
+        let emoji = '🟢';
+        let noStock = false;
 
-                    if (game.customerCarts.includes(userId)) {
-                        buttonText = "Remove from cart";
-                        buttonColor = "btn-danger";
-                        buttonFunction = `removeFromCart(${game.id})`;
-                    } else if (game.customerInventories.includes(userId)) {
-                        buttonText = "Already owned";
-                        buttonColor = 'btn-dark';
-                        buttonDisabled = 'disabled';
-                    } else if (noStock) {
-                        buttonText = "Out of stock";
-                        buttonColor = "btn-dark";
-                        buttonDisabled = 'disabled';
-                    }
+        if (game.stock < 1) {
+            color = 'text-danger';
+            emoji = '🔴';
+            noStock = true;
+        }
 
-                    if (isAdmin) {
-                        loggedInControls = `
+        let loggedInControls = '';
+
+        if (userId !== -1) {
+            let buttonText = "Add to cart";
+            let buttonColor = "btn-success";
+            let buttonFunction = `addToCart(${game.id})`;
+            let buttonId = `buy${game.id}`;
+            let buttonDisabled = '';
+
+            if (game.customerCarts.includes(userId)) {
+                buttonText = "Remove from cart";
+                buttonColor = "btn-danger";
+                buttonFunction = `removeFromCart(${game.id})`;
+            } else if (game.customerInventories.includes(userId)) {
+                buttonText = "Already owned";
+                buttonColor = 'btn-dark';
+                buttonDisabled = 'disabled';
+            } else if (noStock) {
+                buttonText = "Out of stock";
+                buttonColor = "btn-dark";
+                buttonDisabled = 'disabled';
+            }
+
+            if (isAdmin) {
+                loggedInControls = `
                             <div class="d-flex align-items-center justify-content-center gap-1">
                                 <span class="flex-grow-1"></span>
                                 <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editGameModal" onclick="editGame(${game.id})">Edit</button>
                                 <button id="${buttonId}" class="btn ${buttonColor}" onclick="${buttonFunction}" ${buttonDisabled}>${buttonText}</button>
                             </div>
                         `;
-                    } else {
-                        loggedInControls = `
+            } else {
+                loggedInControls = `
                             <div class="d-flex align-items-center justify-content-center gap-1">
                                 <span class="flex-grow-1"></span>
                                 <button id="${buttonId}" class="btn ${buttonColor}" onclick="${buttonFunction}" ${buttonDisabled}>${buttonText}</button>
                             </div>
                         `;
-                    }
-                }
+            }
+        }
 
-                const gameCard = `
+        const gameCard = `
                     <div class="game-card" id="gameCard${game.id}">
                         <img src="${game.path}" alt="${game.name}">
                         <div class="game-details">
@@ -88,14 +117,10 @@ function loadGames(pageNumber) {
                         </div>
                     </div>
                 `;
-                gamesDiv.insertAdjacentHTML('beforeend', gameCard);
-            });
+        gamesDiv.insertAdjacentHTML('beforeend', gameCard);
+    });
 
-            search();
-        }
-    };
-
-    xhr.send();
+    search();
 }
 
 function addToCart(id) {
@@ -238,7 +263,7 @@ function saveChanges(gameId) {
     const cancelButton = document.querySelector('#cancelChangesBtn');
     cancelButton.disabled = true;
 
-    const description = document.getElementById('editDescription').value;
+    const description = document.getElementById('editDescription').value.trim();
     const price = document.getElementById('editPrice').value;
     const stock = document.getElementById('editStock').value;
 
@@ -255,11 +280,47 @@ function saveChanges(gameId) {
 
                 const gameDescription = document.querySelector(`#gameCard${gameId} .game-details p`);
                 const gamePrice = document.querySelector(`#gameCard${gameId} .game-meta span:nth-child(2)`);
-                const gameStock = document.querySelector(`#gameCard${gameId} .game-meta #stock${gameId} span`);
+                const gameStock = document.querySelector(`#gameCard${gameId} .game-meta #stock${gameId}`);
 
                 gameDescription.textContent = description;
                 gamePrice.textContent = `💵 $${price}`;
-                gameStock.textContent = stock;
+                gameStock.dataset.stock = stock;
+
+                const buyButton = document.querySelector(`#buy${gameId}`);
+
+                let color = ''
+                let emoji = '🟢';
+                let noStock = false;
+
+                if (stock < 1) {
+                    color = 'text-danger';
+                    emoji = '🔴';
+                    noStock = true;
+                }
+
+                gameStock.innerHTML = `
+                    ${emoji} <span class="${color}">${stock}</span>
+                `;
+
+                if (stock < 1 && buyButton.textContent === 'Add to cart') {
+                    buyButton.classList.remove('btn', 'btn-success');
+                    buyButton.classList.add('btn', 'btn-dark');
+                    buyButton.textContent = 'Out of stock';
+                    buyButton.disabled = true;
+                } else if (stock > 0 && buyButton.textContent === 'Out of stock') {
+                    buyButton.classList.remove('btn', 'btn-dark');
+                    buyButton.classList.add('btn', 'btn-success');
+                    buyButton.textContent = 'Add to cart';
+                    buyButton.disabled = true;
+                }
+
+                const index = games.findIndex(game => game.id === gameId);
+
+                if (index !== -1) {
+                    games[index].description = description;
+                    games[index].price = price;
+                    games[index].stock = stock;
+                }
             } else {
                 alert('Failed to save changes.');
             }
@@ -271,12 +332,4 @@ function saveChanges(gameId) {
 
     xhr.send();
 }
-
-$('#page-selection').bootpag({
-    total: 6,
-    page: 1,
-    maxVisible: 6
-}).on('page', function(event, num){
-    loadGames(num);
-});
 

@@ -30,10 +30,11 @@ public class User {
     @NotBlank(message = "Password must not be blank!")
     private String password;
 
-    @NotNull
+    @NotNull(message = "Is admin must not be null")
     private boolean isAdmin;
 
     @NotNull(message = "Budget must not be null!")
+    @DecimalMin(value = "0.0", message = "Budget must not be lower than 0.0!")
     private float budget;
 
 }

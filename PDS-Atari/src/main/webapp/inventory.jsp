@@ -1,10 +1,11 @@
 <%@ page import="baleksab.pdsatari.bean.UserBean" %><%--
   Created by IntelliJ IDEA.
   User: c425
-  Date: 26.6.2024.
-  Time: 20:45
+  Date: 27.6.2024.
+  Time: 19:29
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
@@ -24,9 +25,9 @@
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/styles.css">
 
-    <title>PDS-Atari Chat</title>
+    <title>PDS-Atari Inventory</title>
 </head>
-<body class="bg-light" onload="load(<%= userBean.getId() %>)">
+<body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark w-100 position-fixed" style="z-index: 100;">
         <div class="container">
             <a class="navbar-brand" href="index.jsp">PDS-Atari</a>
@@ -62,23 +63,6 @@
     </nav>
 
     <div style="min-height: 56px; height: 56px;" class="w-100 mb-3"></div>
-
-    <div class="container mb-3">
-        <div id="chatMessages" class="d-flex flex-column"></div>
-
-        <div class="d-flex gap-1 w-100 align-items-center justify-content-center">
-            <div class="form-floating flex-grow-1">
-                <input type="text" id="messageInput" name="firstName" class="form-control" placeholder="Type your message..." max="255" min="1">
-                <label for="messageInput">Type your message...</label>
-            </div>
-            <% if (userBean.isAdmin()) { %>
-            <form action="rmi-execution.jsp" method="post">
-                <button type="submit" class="btn btn-dark">Clear History</button>
-            </form>
-            <% } %>
-        </div>
-
-    </div>
 
 
     <div class="modal fade" id="help" tabindex="-1" role="dialog" aria-labelledby="helpModal" aria-hidden="true">
@@ -142,6 +126,5 @@
     </div>
 
     <script src="js/bootstrap.bundle.js"></script>
-    <script src="js/chat.js"></script>
 </body>
 </html>
