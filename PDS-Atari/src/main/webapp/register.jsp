@@ -78,7 +78,6 @@
             <div class="text-center">
                 <p>Already a member? <a href="login.jsp">Login</a></p>
                 <p>Want to go back? <a href="index.jsp">Catalog</a></p>
-                <p>Do you need help? <a><button data-bs-toggle="modal" data-bs-target="#help">Help (?)</button></a></p>
             </div>
         </form>
     </div>

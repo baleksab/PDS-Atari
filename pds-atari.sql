@@ -7,9 +7,9 @@
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
-CREATE DATABASE IF NOT EXISTS `pds-atari`;
+CREATE DATABASE IF NOT EXISTS `PDS-Atari`;
 
-USE `pds-atari`;
+USE `PDS-Atari`;
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -31,7 +31,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `game`
 --
 
-CREATE TABLE `game` (
+CREATE TABLE `Game` (
   `id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `path` varchar(255) DEFAULT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE `game` (
 -- Dumping data for table `game`
 --
 
-INSERT INTO game (id, name, path, price, rating, description, stock) VALUES
+INSERT INTO Game (id, name, path, price, rating, description, stock) VALUES
 (2, '32 in 1', 'images/gallery/32 In 1 (USA).png', 15.99, 4.5, 'Enjoy a collection of 32 classic games all in one cartridge, featuring diverse gameplay and endless fun.', 15),
 (3, 'Ace of Aces', 'images/gallery/Ace of Aces (USA).png', 22.5, 4.2, 'Take to the skies in Ace of Aces, a thrilling aerial combat game where you pilot a World War II fighter plane.', 3),
 (4, 'Alien Brigade', 'images/gallery/Alien Brigade (USA).png', 12.75, 4.0, 'Join the fight against extraterrestrial invaders in Alien Brigade, a fast-paced, action-packed shooter.', 17),
@@ -110,7 +110,7 @@ INSERT INTO game (id, name, path, price, rating, description, stock) VALUES
 --
 -- Indexes for table `game`
 --
-ALTER TABLE `game`
+ALTER TABLE `Game`
   ADD PRIMARY KEY (`id`);
 COMMIT;
 

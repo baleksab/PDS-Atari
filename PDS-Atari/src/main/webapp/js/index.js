@@ -329,7 +329,7 @@ function saveChanges(gameId) {
                     buyButton.classList.remove('btn', 'btn-dark');
                     buyButton.classList.add('btn', 'btn-success');
                     buyButton.textContent = 'Add to cart';
-                    buyButton.disabled = true;
+                    buyButton.disabled = false;
                 }
 
                 const index = games.findIndex(game => game.id === gameId);
