@@ -100,7 +100,7 @@ public class UserCartService {
             userCart.setUser(user);
             userCart.setGame(game);
 
-            userCartRepository.delete(userCart);
+            userCartRepository.delete(userCart, true);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return false;
@@ -140,7 +140,7 @@ public class UserCartService {
                 userCart.setUser(user);
                 userCart.setGame(game);
 
-                userCartRepository.delete(userCart);
+                userCartRepository.delete(userCart, false);
 
                 UserInventory userInventory = new UserInventory();
                 userInventory.setUser(user);

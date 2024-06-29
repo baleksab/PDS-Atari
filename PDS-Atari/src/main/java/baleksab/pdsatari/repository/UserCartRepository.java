@@ -43,7 +43,7 @@ public class UserCartRepository {
         }
     }
 
-    public void delete(UserCart userCart) {
+    public void delete(UserCart userCart, boolean incrementGameStock) {
         entityManager.getTransaction().begin();
 
         TypedQuery<UserCart> query = entityManager.createQuery("SELECT c FROM UserCart c WHERE c.game.id = :gameId and c.user.id = :userId", UserCart.class);
@@ -54,8 +54,11 @@ public class UserCartRepository {
         if (cart != null) {
             Game game = cart.getGame();
             entityManager.remove(cart);
-            game.setStock(game.getStock() + 1);
-            entityManager.merge(game);
+
+            if (incrementGameStock) {
+                game.setStock(game.getStock() + 1);
+                entityManager.merge(game);
+            }
         }
 
         entityManager.getTransaction().commit();
